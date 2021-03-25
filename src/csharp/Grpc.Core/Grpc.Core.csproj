@@ -25,15 +25,19 @@
   </ItemGroup>
 
   <Import Project="SourceLink.csproj.include" />
+
   <ItemGroup>
     <EmbeddedResource Include="..\..\..\etc\roots.pem" />
-      <!--
     <Content Include="..\nativelibs\csharp_ext_macos_x64\libgrpc_csharp_ext.dylib">
       <PackagePath>runtimes/osx-x64/native/libgrpc_csharp_ext.x64.dylib</PackagePath>
       <Pack>true</Pack>
     </Content>
     <Content Include="..\nativelibs\csharp_ext_linux_x64\libgrpc_csharp_ext.so">
       <PackagePath>runtimes/linux-x64/native/libgrpc_csharp_ext.x64.so</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="..\nativelibs\csharp_ext_linux_aarch64\libgrpc_csharp_ext.so">
+      <PackagePath>runtimes/linux-arm64/native/libgrpc_csharp_ext.arm64.so</PackagePath>
       <Pack>true</Pack>
     </Content>
     <Content Include="..\nativelibs\csharp_ext_windows_x64\grpc_csharp_ext.dll">
@@ -48,7 +52,10 @@
       <PackagePath>build/net45/</PackagePath>
       <Pack>true</Pack>
     </Content>
--->
+    <Content Include="buildTransitive\net45\Grpc.Core.targets">
+      <PackagePath>buildTransitive/net45/</PackagePath>
+      <Pack>true</Pack>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -69,7 +76,7 @@
     <PackageReference Include="System.Threading.Thread" Version="4.0.0" />
     <PackageReference Include="System.Threading.ThreadPool" Version="4.0.10" />
   </ItemGroup>
-<!--
+
   <Import Project="NativeDeps.csproj.include" />
--->
+
 </Project>
