@@ -130,6 +130,12 @@ ServerBuilder& ServerBuilder::experimental_type::RegisterCallbackGenericService(
 }
 #endif
 
+ServerBuilder& ServerBuilder::experimental_type::SetContextAllocator(
+    std::unique_ptr<grpc::ContextAllocator> context_allocator) {
+  builder_->context_allocator_ = std::move(context_allocator);
+  return *builder_;
+}
+
 std::unique_ptr<grpc::experimental::ExternalConnectionAcceptor>
 ServerBuilder::experimental_type::AddExternalConnectionAcceptor(
     experimental_type::ExternalConnectionType type,
@@ -298,6 +304,10 @@ std::unique_ptr<grpc::Server> ServerBuilder::BuildAndStart() {
     }
   }
 
+  if (callback_generic_service_ != nullptr) {
+    has_frequently_polled_cqs = true;
+  }
+
   const bool is_hybrid_server = has_sync_methods && has_frequently_polled_cqs;
 
   if (has_sync_methods) {
@@ -368,6 +378,13 @@ std::unique_ptr<grpc::Server> ServerBuilder::BuildAndStart() {
             "At least one of the completion queues must be frequently polled");
     return nullptr;
   }
+
+#ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+  server->RegisterContextAllocator(std::move(context_allocator_));
+#else
+  server->experimental_registration()->RegisterContextAllocator(
+      std::move(context_allocator_));
+#endif
 
   for (const auto& value : services_) {
     if (!server->RegisterService(value->host.get(), value->service)) {
