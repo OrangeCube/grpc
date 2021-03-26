@@ -40,7 +40,7 @@ RUN apt-get update && apt-key update && apt-get install -y \
   strace \
   python-dev \
   python-setuptools \
-  python-yaml \
+  python3-yaml \
   telnet \
   unzip \
   wget \
@@ -50,6 +50,9 @@ RUN apt-get update && apt-key update && apt-get install -y \
 RUN apt-get update && apt-get install -y golang && apt-get clean
 
 # Java required by Android SDK
+RUN apt-get update \
+  && apt-get install -y software-properties-common \
+  && apt-add-repository -y 'deb http://security.debian.org/debian-security stretch/updates main'
 RUN apt-get update && apt-get -y install openjdk-8-jdk && apt-get clean
 
 # Install Android SDK
